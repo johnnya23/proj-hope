@@ -212,7 +212,8 @@ add_action('save_post', 'jma_ama_save_post');
 
 function jma_display_cpt_grid($atts)
 {
-    global $jmcpt_options_array;/*comment*/
+    global $jmcpt_options_array;
+    /*comment*/
     $defaults = array(
          'post_type' => $jmcpt_options_array['cpt'],
          'taxonomies' => 'book-category',
