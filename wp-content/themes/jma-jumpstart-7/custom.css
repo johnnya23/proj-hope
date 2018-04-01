@@ -475,12 +475,12 @@ div.fixed-sidebar-inner {
 
 /*path page*/
 
-.page-id-43 #jma-tax-grid-wrap .jma-column:nth-of-type(4n+1) {
-  clear: both;
-}
-
 @media(max-width:767px) {
   .page-id-43 #jma-tax-grid-wrap .jma-column:nth-of-type(2n+1) {
     clear: both;
   }
+}
+
+.page-id-43 #jma-tax-grid-wrap .jma-column:nth-of-type(4n+1) {
+  clear: both;
 }
