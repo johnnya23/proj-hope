@@ -1,0 +1,10 @@
+/* Put your custom CSS in this file.
+ * MAKE SURE YOU ACTIVATE THIS FIEL IN FUNCTIONS.PHP */
+
+#themeblvd-plugin-install-notice {
+    display: none;
+}
+
+.tb-options-wrap .section {
+    padding: 0 15px;
+}
