@@ -64,7 +64,7 @@ body.search {
     top: -88px;
 }
 
-.jma-banner-title .tb-page-info, .jma-banner-title .has-title>.entry-header, .jma-banner-title.single-post #content .entry-header {
+.jma-banner-title .tb-page-info, .jma-banner-title .has-title>.entry-header, .jma-banner-title.single #content .entry-header {
     display: none;
 }
 

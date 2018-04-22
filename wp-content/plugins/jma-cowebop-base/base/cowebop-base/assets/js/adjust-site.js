@@ -39,7 +39,7 @@ jQuery(document).ready(function($) {
                     'height': $menu.find('ul.sf-menu').find('li.level-1').find('a').outerHeight() + 'px'
                 });
                 $widget_height = 0;
-
+                console.log(menu_height);
                 $menu.next().css('margin-top', menu_height + 'px');
                 if ($menu.hasClass('bottom')) {
                     if ($menu.find('.jma-header-right').length) {
