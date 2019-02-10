@@ -52,11 +52,9 @@ $dynamic_styles[40] =  array($main_bg ,
 $dynamic_styles[50] =  array('#access.fix-menu' ,// add child sticky-menu
     array('background-color', get_trans($jma_spec_options['menu_background_color'], 0.9))
 );
-if ($root_off) {
-    $dynamic_styles[60] =  array('#access.fix-menu' ,// add child sticky-menu when menu root bg off selected
+    $dynamic_styles[60] =  array('#access.fix-menu.remove_root_bg' ,// add child sticky-menu when menu root bg off selected
         array('background-color', get_trans($jma_spec_options['header_background_color'], 0.9) . '!important')
     );
-}
 if ($jma_spec_options[ 'body_shape' ] == 'boxed' || $jma_spec_options[ 'body_shape' ] == 'dark_modular') {
     $dynamic_styles[70] =  array('min-' . ($jma_spec_options['site_width']+55) . '@#access.fix-menu' ,
         array('width', ($jma_spec_options['site_width']) . 'px')
@@ -78,7 +76,7 @@ $dynamic_styles[100] =  array($base_menus . $ul . ' > ' . 'li:first-child',
 $dynamic_styles[110] =  array($base_menus . $ul . 'li a, ' . $base_menus . $ul . 'li .mega-section-header, ' . $base_menus . $ul . 'li .mega-section-header:hover a',
     array('color', $jma_spec_options['menu_font_color'] )
 );//body #branding > .wrap .header-nav .wrap ul.sf-menu li a
-$dynamic_styles[115] =  array($base_menus . '.remove_root_bg ' . $ul . '>li> a ',
+$dynamic_styles[115] =  array($base_menus . '.remove_root_bg' . $ul . '>li> a ',
     array('color', $jma_spec_options['header_font_color'])
 );
 $dynamic_styles[120] =  array($base_menus . $ul . 'li.current_page_item > a, ' . $base_menus . $ul . 'li.current-menu-item > a, ' . $base_menus . $ul . 'li.current-menu-ancestor > a, ' . $base_menus . $ul . 'li.current-post-parent > a, ' . $base_menus . $ul . 'li.current-menu-parent > a, ' . $base_menus . $ul . 'li.current-menu-item > a:hover',
@@ -152,7 +150,7 @@ if ($logo_in_menu) {
 
 $dynamic_styles[240] =  array($base_menus . 'ul.sf-menu ul, '. $base_menus . 'ul.sf-menu .sf-mega',
     array('background-color', $jma_spec_options['menu_background_color']),
-    array('background-color', get_tint($jma_spec_options['menu_background_color'], 0.9)),
+    array('background-color', get_trans($jma_spec_options['menu_background_color'], 0.9)),
     array('border-color', $jma_spec_options['menu_background_color'])
 );
 
@@ -202,17 +200,17 @@ foreach ($font_selectors as $key => $font) {
     );
 }
 
-$dynamic_styles[1000] = array('.btn, .btn-primary, body .theme-default .nivo-caption a.btn, body .search, .tb-button, .comment-reply-link, #comments .comment-body .reply a, .btn:focus, .tb-button:focus, .comment-reply-link:focus, #comments .comment-body .reply a:focus, input[type="submit"], button[type="submit"]',
+$dynamic_styles[1000] = array('.btn, .btn-primary, body .metaslider .theme-default .nivo-caption a.btn, body .search, .tb-button, .comment-reply-link, #comments .comment-body .reply a, .btn:focus, .tb-button:focus, .comment-reply-link:focus, #comments .comment-body .reply a:focus, input[type="submit"], button[type="submit"]',
     array('color', $jma_spec_options['button_font']),
     array('background-color',  $jma_spec_options['button_back']),
     array('border-color', $jma_spec_options['button_font']),
     array('border','solid!important'),
 );
-$border_array = get_tint($jma_spec_options['typography_body_color']);
+$border_array = get_tint($jma_spec_options['footer_background_color']);
 $dynamic_styles[1010] = array('textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input, select',
     array('border-color', $border_array['light_hex'])
 );
-$dynamic_styles[1020] = array('.btn:hover, body .theme-default .nivo-caption a.btn:hover, .btn:focus, .btn:active, .btn.active, .btn-primary:hover, .tb-button:hover, .comment-reply-link:hover, #comments .comment-body .reply a:hover, input[type="submit"]:hover',
+$dynamic_styles[1020] = array('.btn:hover, body .metaslider .theme-default .nivo-caption a.btn:hover, .btn:focus, .btn:active, .btn.active, .btn-primary:hover, .tb-button:hover, .comment-reply-link:hover, #comments .comment-body .reply a:hover, input[type="submit"]:hover',
     array('color', $jma_spec_options['button_font_hover']),
     array('background-color',  $jma_spec_options['button_back_hover']),
     array('border-color', $jma_spec_options['button_font_hover']),
@@ -226,7 +224,7 @@ if ($body_shape == 'dark_modular') {
 } elseif ($body_shape == 'boxed') {
     $page_selectors ='#main> .wrap, #custom-main';
 } elseif ($body_shape == 'stretch_bordered') {
-    $page_selectors ='#main> .wrap, .jma-custom-wrap';
+    $page_selectors ='#main> .wrap, .site-main .wrap';
 } else {//stretch
     $page_selectors ='body #wrapper';
 }
@@ -251,7 +249,7 @@ if ($body_shape == 'boxed') {
     $border_selector = '#container';
 }
 if ($body_shape == 'stretch_bordered') {
-    $border_selector = '#main > .wrap, .sidebar-layout-full_width .jma-custom-wrap';
+    $border_selector = '#main > .wrap, .sidebar-layout-full_width .site-main';
 }
 if ($body_shape == 'dark_modular') {
     $border_selector = '#top #branding, .site-footer, #content > .inner, .sidebar-layout-full_width #custom-main, .fixed-sidebar .fixed-sidebar-inner, .outside-sidebar-widget-wrap';
@@ -295,7 +293,7 @@ if ($body_shape == 'stretch_bordered') {
     );
 }
 if ($body_shape == 'dark_modular') {
-    $dynamic_styles[3070] = array('#top,  #custom-main, #main , #bottom',
+    $dynamic_styles[3070] = array('#top,  .site-main , #bottom',
         array('max-width', $jma_spec_options['site_width'].'px'),
         array('margin-left', 'auto'),
         array('margin-right', 'auto'),
@@ -313,30 +311,22 @@ if (($body_shape == 'stretch' || $body_shape == 'stretch_bordered') && $jma_spec
     $dynamic_styles[3090] = array('#wrapper',
         array('padding', '0 ')/* Lose gutters on sides as window shrinks */
     );
-    $dynamic_styles[3100] = array('#access > div, #access2 > div, .tb-sticky-menu > .wrap',
+    $builder_sel = $body_shape == 'stretch'? '.element-section > .element, ': '.jma-custom-wrap, ';
+
+    $dynamic_styles[3110] = array($builder_sel .'.widgets-above-header>.wrap, #access > div, #access2 > div, .tb-sticky-menu > .wrap, .header-top > .wrap, .header-above > .wrap, .header-content,.header-content.image .wrap>div>div, #main, .site-footer > .wrap > div > .wrap, .widgets-below-footer>.wrap',
         array('margin-left', 'auto'),
         array('margin-right', 'auto'),
-        array('max-width', ($jma_spec_options['site_width']).'px')
+        array('max-width', ($jma_spec_options['site_width'] + 40).'px'),
+        array('padding-left', '20px'),
+        array('padding-right', '20px')
     );
+
     if ($body_shape == 'stretch') {
-        $dynamic_styles[3110] = array('.header-top > .wrap, .header-above > .wrap, .header-content,.header-content.image .wrap>div>div, #main, .element-section > .element, .site-footer > .wrap > div > .wrap',
-            array('margin-left', 'auto'),
-            array('margin-right', 'auto'),
-            array('max-width', ($jma_spec_options['site_width'] + 40).'px'),
-            array('padding-left', '20px'),
-            array('padding-right', '20px')
+        $dynamic_styles[3120] = array('.element-section>.element.popout.first',
+            array('margin-top', '-' . $jma_spec_options['builder_section_vert'] . 'px'),
         );
-        $dynamic_styles[3120] = array('.element-section',
-            array('padding-left', ' 0'),
-            array('padding-right', ' 0')
-        );
-    } else {
-        $dynamic_styles[3130] = array('.header-top > .wrap, .header-above > .wrap, .header-content,.header-content.image .wrap>div>div, #main, #custom-main, .site-footer > .wrap > div > .wrap',
-            array('margin-left', 'auto'),
-            array('margin-right', 'auto'),
-            array('max-width', ($jma_spec_options['site_width'] + 40).'px'),
-            array('padding-left', '20px'),
-            array('padding-right', '20px')
+        $dynamic_styles[3130] = array('.element-section>.element.popout.last',
+            array('margin-bottom', '-' . $jma_spec_options['builder_section_vert'] . 'px'),
         );
     }
 }
@@ -516,11 +506,12 @@ if ($body_shape != 'dark_modular') {
         array('padding-left', '20px')
     );// end creases for non-dark modular
 } else {// dark modular specific styles
-    $dynamic_styles[6000] = array('#custom-main, #main ',
+    $dynamic_styles[6000] = array('.site-main ',
         array('margin', '20px auto')
     );
     $dynamic_styles[6010] = array('#custom-main .element-section',
-        array('padding', '20px')
+        array('padding-left', '20px'),
+        array('padding-right', '20px')
     );
     $dynamic_styles[6020] = array('.outside-sidebar-inner',
         array('padding-top', '0 '),
@@ -551,14 +542,15 @@ if ($body_shape != 'dark_modular') {
 // end dark modular specific
 // title to top styles
 if ($jma_spec_options['title_page_top']) {
-    if ($body_shape == 'stretch') {
-        $dynamic_styles[7000] = array('#full-page-title-inner h1, #full-page-title-inner h2',
-            array('max-width', $jma_spec_options['site_width'] . 'px'),
+    $dynamic_styles[7000] = array('#full-page-title-inner h1, #full-page-title-inner h2',
+            array('max-width', $jma_spec_options['site_width']+40 . 'px'),
             array('margin-left', 'auto'),
             array('margin-right', 'auto'),
+            array('padding-left', '20px'),
+            array('padding-right', '20px'),
             array('margin-bottom', '0 ')
         );
-    }
+
     $banner_padding_top = $jma_spec_options['banner_shadows']? '10px': ' 0';
     $dynamic_styles[7010] = array('#full-page-title',
         array('padding-top', $banner_padding_top),
@@ -570,18 +562,20 @@ if ($jma_spec_options['title_page_top']) {
     );
 
 
-    $banner_padding_x = $body_shape == 'stretched'? ' 0': ' 20px';
+
     $banner_border_color = $jma_spec_options['banner_bg_color']? $jma_spec_options['banner_bg_color']: $jma_spec_options['footer_background_color'];
     $banner_shadow_color = $jma_spec_options['banner_bg_color']? '#000000': $jma_spec_options['footer_background_color'];
     if (!$jma_spec_options['banner_shadows']) {
         $banner_border_style = array('#full-page-title-inner',
-            array('padding', $jma_spec_options['banner_height'] . 'px' . $banner_padding_x),
+            array('padding-top', $jma_spec_options['banner_height'] . 'px'),
+            array('padding-bottom', $jma_spec_options['banner_height'] . 'px'),
             array('border-top', 'solid 1px ' . $banner_border_color),
             array('border-bottom', 'solid 1px ' . $banner_border_color)
         );
     } else {
         $banner_border_style = array('#full-page-title-inner',
-            array('padding', $jma_spec_options['banner_height'] . 'px' . $banner_padding_x),
+            array('padding-top', $jma_spec_options['banner_height'] . 'px'),
+            array('padding-bottom', $jma_spec_options['banner_height'] . 'px'),
             array('-moz-box-shadow', '0 0 10px ' . $banner_shadow_color),
             array('-webkit-box-shadow', '0 0 10px ' . $banner_shadow_color),
             array('box-shadow', '0 0 10px ' . $banner_shadow_color)
@@ -642,43 +636,57 @@ $dynamic_styles[9040] = array('.site-footer,  .header-top, .mobile-nav, .tb-mobi
     array('color', $jma_spec_options['footer_font_color']),
 );
 
-$dynamic_styles[9050] = array('.site-footer a,.header-top a, .header-top .tb-social-icons>li>a, .header-top-nav .tb-search-trigger, .header-top-nav .tb-cart-trigger , .tb-mobile-panel .tb-mobile-menu>li>.menu-btn, .tb-mobile-panel .tb-mobile-menu>li>.menu-btn:hover, .tb-mobile-panel .tb-mobile-menu>li>.menu-btn:focus, .tb-mobile-panel .tb-mobile-menu>li>.menu-btn:active, .tb-nav-trigger:hover .hamburger span,.tb-mobile-panel .header-text, .tb-social-icons.light>li>a ',
+$dynamic_styles[9050] = array('.site-footer a,.header-top a, .header-top .tb-social-icons>li>a, .header-top-nav .tb-search-trigger, .header-top-nav .tb-cart-trigger , .tb-mobile-panel .tb-mobile-menu>li>.menu-btn, .tb-mobile-panel .tb-mobile-menu>li>.menu-btn:hover, .tb-mobile-panel .tb-mobile-menu>li>.menu-btn:focus, .tb-mobile-panel .tb-mobile-menu>li>.menu-btn:active, .tb-nav-trigger:hover .hamburger span,.tb-mobile-panel .header-text',
     array('color', $jma_spec_options['footer_font_color']),
 );
 
-$dynamic_styles[9060] = array('.tb-mobile-panel .tb-mobile-menu>li>.menu-btn, .tb-mobile-panel .tb-mobile-menu>li>.menu-btn:hover, .tb-mobile-panel .tb-mobile-menu>li>.menu-btn:focus, .tb-mobile-panel .tb-mobile-menu>li>.menu-btn:active,  .tb-nav-trigger:hover, .mobile-nav>li>a ',
+$dynamic_styles[9060] = array('.btn-share',
+    array('color', $jma_spec_options['footer_background_color']),
+);
+
+$dynamic_styles[9070] = array('.tb-mobile-panel .tb-mobile-menu>li>.menu-btn, .tb-mobile-panel .tb-mobile-menu>li>.menu-btn:hover, .tb-mobile-panel .tb-mobile-menu>li>.menu-btn:focus, .tb-mobile-panel .tb-mobile-menu>li>.menu-btn:active,  .tb-nav-trigger:hover, .mobile-nav>li>a, .tb-team-member .member-image::before, .btn-share:hover, .btn-share:focus, .tb-tags a:hover, .tb-tags a:focus, .tb-lang-popup a:hover, .tb-lang-popup a:focus, .post_showcase .showcase-item.has-title .featured-item.showcase .tb-thumb-link:after, .post_showcase .showcase-item.has-title .featured-item.showcase.tb-thumb-link:after',
     array('background-color', $jma_spec_options['footer_background_color']),
 );
-$dynamic_styles[9070] = array('.tb-thumb-link .thumb-link-icon',
+$dynamic_styles[9080] = array('.tb-thumb-link .thumb-link-icon, body .metaslider .theme-default .nivo-directionNav a',
     array('background-color', get_trans($jma_spec_options['footer_background_color'], 0.6)),
 );
 
-$dynamic_styles[9080] = array('.tb-nav-trigger:hover .hamburger span, .tb-nav-trigger .hamburger span',
+$dynamic_styles[9090] = array('.tb-nav-trigger:hover .hamburger span, .tb-nav-trigger .hamburger span',
     array('background-color', get_trans($jma_spec_options['footer_font_color']), 0.9),
 );
 
-$dynamic_styles[9090] = array('html',
+$dynamic_styles[9100] = array('.header-top .tb-social-icons>li>a:hover, .header-top .jma-top-widget a:hover, .header-top .top-search a:hover',
+    array('color', get_trans($jma_spec_options['footer_font_color']), 0.7),
+);
+
+$dynamic_styles[9110] = array('html',
     array('background-color', $jma_spec_options['site_background_color'])
 );
 if ($body_shape == 'stretch_bordered' || $body_shape == 'stretch') {
-    $dynamic_styles[9100] = array('#wrapper',
+    $dynamic_styles[9120] = array('#wrapper',
         array('background-color', $jma_spec_options['site_background_color'])
     );
-    $dynamic_styles[9110] = array('html',
+    $dynamic_styles[9130] = array('html',
         array('background-color', $jma_spec_options['footer_background_color'])
     );
 }
-$dynamic_styles[9120] = array('.element-section',
-    array('padding-bottom', $jma_spec_options['builder_section_vert']),
-    array('padding-top', $jma_spec_options['builder_section_vert'])
+$dynamic_styles[9140] = array('.element-section',
+    array('padding-bottom', $jma_spec_options['builder_section_vert'] . 'px'),
+    array('padding-top', $jma_spec_options['builder_section_vert'] . 'px')
 );
-$dynamic_styles[9130] = array('.element-section>.element, .element-columns .element',
-    array('margin-bottom', $jma_spec_options['builder_element_vert'])
+$dynamic_styles[9150] = array('.element-section>.element, .element-columns .element',
+    array('margin-bottom', $jma_spec_options['builder_element_vert'] . 'px')
 );
-$site_width = $jma_spec_options['site_width'];
-if (array_key_exists('social_media_pos', $jma_spec_options) && $jma_spec_options['social_media_pos']) {
-    $site_width = $jma_spec_options['social_media_pos']['wp_footer']? $jma_spec_options['site_width']+25: $jma_spec_options['site_width'];
-}
+$dynamic_styles[9160] = array('.tooltip.top .tooltip-arrow, .tb-contact-popover.bottom',
+    array('border-top-color', $jma_spec_options['footer_background_color'])
+);
+$dynamic_styles[9170] = array('.tooltip.bottom .tooltip-arrow, .tb-contact-popover.bottom > .arrow:after',
+    array('border-bottom-color', $jma_spec_options['footer_background_color'])
+);
+$dynamic_styles[9180] = array('.tooltip-inner',
+    array('border-color', $jma_spec_options['footer_background_color'])
+);
+
 $dynamic_styles = apply_filters('dynamic_styles_filter', $dynamic_styles);
 $jma_css_values =  generic_output($dynamic_styles);
 /* create html output from  $jma_css_values */

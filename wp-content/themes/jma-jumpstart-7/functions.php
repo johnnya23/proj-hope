@@ -26,13 +26,10 @@ function jma_adjust_theme_scripts()
 {
     // Register child theme file before Jump Start to override
 
-    global $jma_spec_options;
-    if ($jma_spec_options['child_sticky_menu'] || logo_in_menu()) {
-        wp_dequeue_script('adjust_logo_js');
-        wp_enqueue_script('child_adjust_logo_js', get_stylesheet_directory_uri() . '/adjust-logo.js', array('jquery', 'jma_big_slider_js'));
-    }
+
+    wp_enqueue_script('child_adjust_js', get_stylesheet_directory_uri() . '/child-adjust.js', array('jquery'));
 }
-//add_action( 'wp_enqueue_scripts', 'jma_adjust_theme_scripts', 30 );
+//add_action('wp_enqueue_scripts', 'jma_adjust_theme_scripts', 30);
 
 function jumpstart_child_option_id($id)
 {

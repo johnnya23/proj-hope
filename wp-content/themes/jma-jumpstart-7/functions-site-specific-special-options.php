@@ -9,6 +9,11 @@ function jma_scroll_global_config($setup)
 }
 //add_filter('themeblvd_global_config', 'jma_scroll_global_config');
 
+function jma_child_change_graphic_lib($array)
+{
+    return array( 'WP_Image_Editor_GD', 'WP_Image_Editor_Imagick' );
+}
+add_filter('wp_image_editors', 'jma_child_change_graphic_lib');
 
 add_filter('widget_text', 'do_shortcode');
 
@@ -123,6 +128,8 @@ function jma_post_filter($setup)
     return $setup;
 }
 add_filter('themeblvd_post_meta', 'jma_post_filter');
+
+//add_filter('woocommerce_cart_needs_payment', '__return_false');
 
 
 function jma_register_subject_post_types()

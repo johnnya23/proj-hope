@@ -2,6 +2,27 @@
 
 add_filter('widget_text', 'do_shortcode');//FOR WIDGET SHORTCODE
 
+
+/**
+ * Absolute file path to cowebop base directory.
+ *
+ * @since Theme_Blvd 2.0.0
+ */
+define('JMA_COWEBOP_BASE_DIRECTORY', plugin_dir_path(__FILE__));
+
+/**
+ * URI to cowebop base directory.
+ *
+ * @since Theme_Blvd 2.0.0
+ */
+define('JMA_COWEBOP_BASE_URI', plugin_dir_url(__FILE__));
+
+function jma_cowebop_base_icon_js_file_url()
+{
+    return JMA_COWEBOP_BASE_URI . 'assets/js/fontawesome.min.js';//5.4.1
+}
+add_filter('themeblvd_icon_js_file_url', 'jma_cowebop_base_icon_js_file_url');
+
 if (!function_exists('jmaStartsWith')) {
     function jmaStartsWith($haystack, $needle)
     {
@@ -113,16 +134,7 @@ add_filter('the_content', 'shortcode_empty_paragraph_fix');
 /*********************************************************************
  * ADD SOME EXTRA HOOKS
  ********************************************************************/
-//add hooks to the top and bottom of .entry-content div (also required content-page.php modifications)
-//immediately inside <article>
-function jma_content_top()
-{
-    do_action('jma_content_top');
-}
-function jma_content_bottom()
-{
-    do_action('jma_content_bottom');
-}
+
 //add hooks to the outside sidebar
 function jma_sidebar_top()
 {
@@ -200,6 +212,7 @@ $jma_spec_options = jma_get_theme_values();//echo '<pre>';print_r($jma_spec_opti
  */
 function jma_images_on($post_id = 0)
 {
+    $header_value = '';
     if (!$post_id) {
         global $post;
         $post_id = get_the_ID();
@@ -217,7 +230,11 @@ function jma_images_on($post_id = 0)
     if (get_post_meta($post_id, '_jma_header_data_key', true)) {
         $header_value =  get_post_meta($post_id, '_jma_header_data_key', true);
     }
-    $page_images = $header_value['change_header_default'] ;
+    if (is_array($header_value)) {
+        $page_images = $header_value['change_header_default'] ;
+    } else {
+        return false;
+    }
     $return = (($jma_spec_options[ $images_string ] && $page_images != 'off') || (!$jma_spec_options[ $images_string ] && $page_images == 'on'));
     return $return;
 }
@@ -332,7 +349,7 @@ require_once 'functions-css-builder-helpers.php';
 
 /**
  * @function generate_style_css generate dynamic-styles.css from dynamic-styles-builder.php
- * and supply values for $jma_spec_options, $logo_in_menu, $root_off
+ * and supply values for $jma_spec_options, $logo_in_menu
  *
  */
 function generate_style_css()
@@ -340,15 +357,11 @@ function generate_style_css()
     $jma_spec_options = jma_get_theme_values();//make $jma_spec_options available to dynamic-styles-builder.php
 
     $logo_in_menu = false;
-    $root_off = false;
     $sortable_items = $jma_spec_options['header_content'];
     if (is_array($sortable_items)) {
         foreach ($sortable_items as $sortable_item) {
             if ($sortable_item['logo']==1 && $sortable_item['header_element'] == 'access') {
                 $logo_in_menu = true;
-            }
-            if ($sortable_item['remove_root_bg']==1 && $sortable_item['header_element'] == 'access') {
-                $root_off = true;
             }
         }
     }
@@ -406,6 +419,6 @@ add_action('admin_head', 'jma_backend_custom_css');
 function jma_theme_scripts()
 {
     wp_enqueue_script('metaslider-nivo-slider');
-    wp_enqueue_script('adjust_site_js', plugin_dir_url(__FILE__) . '/assets/js/adjust-site.min.js', array('jquery'));
+    wp_enqueue_script('adjust_site_js', plugin_dir_url(__FILE__) . '/assets/js/adjust-site.min.js', array('jquery', 'themeblvd'));
 }
 add_action('wp_enqueue_scripts', 'jma_theme_scripts');

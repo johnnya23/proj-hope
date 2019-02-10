@@ -9,8 +9,7 @@ if (!function_exists('jma_implement_special_options')) {
     function jma_implement_special_options()
     {
         global $post;
-        add_filter('themeblvd_toggle', 'jma_child_themeblvd_toggle');
-        add_filter('themeblvd_icon_shims', '__return_true');
+        add_filter('themeblvd_toggle_icons', 'jma_base_toggle_icons');
         remove_action('themeblvd_header_content', 'themeblvd_header_content_default');//clear the header default content
         remove_action('themeblvd_header_menu', 'themeblvd_header_menu_default');
         add_action('themeblvd_header_content', 'jma_header_content_default');//add our loop for sortable header
@@ -34,8 +33,8 @@ if (!function_exists('jma_implement_special_options')) {
 
         if (is_page_template('template_builder.php') && $jma_body_style == 'stretch_bordered') {
             //wrap the custom template with div .jma-custom-wrap
-            add_action('themeblvd_content_top', 'jma_custom_border_top', 1);
-            add_action('themeblvd_content_bottom', 'jma_custom_border_bottom', 9999);
+            add_action('themeblvd_header_after', 'jma_custom_border_top', 9999);
+            add_action('themeblvd_footer_before', 'jma_custom_border_bottom', 1);
         }
         if ($jma_body_style == 'dark_modular') {//remove ad_above_content and breadcrumbs from before content-sidebar-wrap
             remove_action('themeblvd_before_layout', 'themeblvd_breadcrumbs_default');
@@ -47,8 +46,6 @@ if (!function_exists('jma_implement_special_options')) {
 
             add_action('themeblvd_content_top', 'themeblvd_widgets_above_content', 2);//add ad_above_content & br. cr. to top of content
             add_action('themeblvd_content_top', 'themeblvd_breadcrumbs_default', 3);//add ad_above_content & br. cr. to top of content
-            remove_action('themeblvd_main_bottom', 'themeblvd_main_bottom_default');
-            add_action('themeblvd_content_bottom', 'themeblvd_main_bottom_default');
         }
         if ($jma_high_sidebar == 'left' || $jma_high_sidebar == 'right') {
             add_action('themeblvd_header_after', 'jma_add_outside_col_top');// same html markup weather 'right' or 'left'
@@ -69,10 +66,26 @@ if (!function_exists('jma_implement_special_options')) {
         }
 
         //function in header-images.php displays header images (hooked in loop below)
-        add_action('jma_header_image', 'jma_header_image_html');
+        if (jma_images_on()) {
+            add_action('jma_header_image', 'jma_header_image_html');
+            add_action('jma_header_image_after', 'jma_header_widget');
+        }
     }
 }
 add_action('template_redirect', 'jma_implement_special_options');
+
+function jma_header_widget()
+{
+    global $post;
+    $widget_html = '';
+    if (get_post_meta($post->ID, '_jma_header_data_key', true)) {
+        $header_values = get_post_meta($post->ID, '_jma_header_data_key', true);
+    }
+    if ($header_values['widget_area']) {
+        $widget_html = '<div class="jma-header-overlay post-id-' . $post->ID . '"><div>' . $header_values['widget_area'] . '</div></div>';
+    }
+    echo $widget_html;
+}
 
 /**
  * @function alt_sticky_logo allows a custom logo if paret theme sticky menu is in use
@@ -200,17 +213,24 @@ function jma_menu_filter($args)
 }
 
 /**
-     * function jma_child_themeblvd_toggle
-     * filter toggle ements to replace plus/minus with angle right and down
-     * @param $output vaulue from parent theme
-     * @return replaced classed (replace panel heading to "break" parent theme jQuery)
-     */
+ * function jma_base_toggle_icons
+ * filter toggle ements to replace plus/minus with angle right and down
+ * @param $output vaulue from parent theme
+ * @return replaced
+ */
 
-function jma_child_themeblvd_toggle($output)
-{
-    $output = str_replace(array( 'panel-heading','plus-circle', 'minus-circle'), array( 'jma-panel-heading','angle-right', 'angle-down'), $output);
-    return $output;
-}
+ function jma_base_toggle_icons($icons)
+ {
+
+     // Icon for opening a closed toggle.
+     $icons['show'] = 'angle-right';
+
+     // Icon for closing an open toggle.
+     $icons['hide'] = 'angle-down';
+
+     return $icons;
+ }
+
 /**
  * @function jma_add_title add page title or banner content to the page
  *
@@ -222,10 +242,13 @@ if (!function_exists('jma_add_title')) {
         global $jma_spec_options;
         $title_inner_element = $jma_spec_options['title_page_top'] == 2 && (is_page($post->ID) || is_single($post->ID))? 'h2': 'h1';
         $title_element = $jma_spec_options['title_page_top'] == 2 && (is_page($post->ID) || is_single($post->ID))? 'div': 'header';
+        $banner_value = $banner_text = '';
         if (get_post_meta(get_the_ID(), '_jma_banner_data_key', true)) {
             $banner_value =  get_post_meta(get_the_ID(), '_jma_banner_data_key', true);
         }
-        $banner_text = $banner_value['banner_text'];
+        if (is_array($banner_value)) {
+            $banner_text = $banner_value['banner_text'];
+        }
         $title = false;
         $opening = '<' . $title_element . ' id="full-page-title"><div id="full-page-title-inner" class="entry-header"><' . $title_inner_element . ' class="entry-title">';
         $closing = '</' . $title_inner_element . '></div></' . $title_element . '><!--full-page-title-->';
@@ -260,7 +283,7 @@ if (!function_exists('jma_add_title')) {
 
 
 /**
- * @function jma_copy_text filter to prepend copyright text with symbol and current year
+ * @function jma_copy_text insert theme options into footer
  *
  */
 
@@ -268,9 +291,10 @@ function jma_copy_text($current)
 {
     global $jma_spec_options;
     $current = ($jma_spec_options['footer_copyright'])? $current: '';
-    $return = '<div class="clearfix"><div class="float-at-768 col-sm-12">' . $current;
+    $footer_align = $jma_spec_options['schema_footerextra']? ' has-extra': '';
+    $return = '<div style="display:block" class="row clearfix"><div class="float-at-768 col-sm-12">' . $current;
     if ($jma_spec_options['schema_company']) {
-        $return .= '<div id="schema_block" class="schema_organization clearfix" itemscope itemtype="http://schema.org/Organization">
+        $return .= '<div id="schema_block" class="schema_organization' . $footer_align . ' clearfix" itemscope itemtype="http://schema.org/Organization">
 			<span class="date">&copy; '. date('Y'). '&nbsp; </span><a class="schema_url" target="_blank" itemprop="url" href="' . $jma_spec_options['schema_url'] . '">
 			<span class="schema_name" itemprop="name">' . $jma_spec_options['schema_company'] . '</span>
 			</a>';
@@ -297,6 +321,10 @@ function jma_copy_text($current)
             $return .= ' <div class="phone divide-left">Phone:&nbsp;<span class="nowrap" itemprop="telephone">' . $jma_spec_options['schema_phone'] . '</span></div>';
         }
         $return .= '</div>';
+
+        if ($jma_spec_options['schema_footerextra']) {
+            $return .= ' <div class="footer-extra">' . $jma_spec_options['schema_footerextra'] . '</div>';
+        }
         $return .= '</div>';
         $return .= '</div>';
     }
@@ -358,7 +386,7 @@ function jma_header_content_default()
 
             //end build class for nav
 
-            $widget_html = '<div class="jma-header-right">' . themeblvd_get_widgets($item['sidebar']['sidebar']) . '</div>';
+
             if (strpos($item['header_element'], 'content')) {
                 // CONTENT CODE CONTENT CODE
                 $jma_class .= ' header-content';
@@ -396,19 +424,22 @@ function jma_header_content_default()
                     do_action('themeblvd_header_logo');
                 }
                 if ($item['sidebar']['type']) {
+                    $widget_html = '<div class="jma-header-right">' . themeblvd_get_widgets($item['sidebar']['sidebar']) . '</div>';
                     echo $widget_html;
                 }
                 if (!strpos($item['header_element'], 'content')) {//cant have menu with sidebar
                     $menu = $item['header_element'] == 'access'? 'primary': 'jma_secondary_menu';
                     wp_nav_menu(themeblvd_get_wp_nav_menu_args($menu));
-                    do_action('themeblvd_header_menu_addon');
+                    //use the parent theme addon hook for primary menu only
+                    $addon = $menu === 'primary'? 'themeblvd_header_menu_addon': 'jma_seconary_header_menu_addon';
+                    do_action($addon);
                 } ?>
 			</div></div></div><!-- .wrap (end) -->
 
 			<?php
             }// end this will either build simple header content then underlay image or add menu (with logo if called for)
             //adds all the image code here (image is considered a content item)
-            if ($item['header_element'] == 'image jma-header-content' && jma_images_on()) {
+            if ($item['header_element'] == 'image jma-header-content') {
                 do_action('jma_header_image');
             }
 

@@ -11,7 +11,9 @@ if (!function_exists('jma_add_header_input_box')) {
                 'jma_header_input_section',
                 __('Current Page Header Content', 'jma_textdomain'),
                 'jma_header_input_box',
-                $screen, 'side', 'high'
+                $screen,
+                'side',
+                'high'
             );
         }
     }
@@ -82,6 +84,16 @@ if (!function_exists('jma_header_input_box')) {
         echo '<option value="1"'.selected($header_values['use_featured_image'], '1').'>Use Featured Image</option>';
         echo '<option value="0"'.selected($header_values['use_featured_image'], '0').'>Use Default Image</option>';
         echo '</select><br/><br/>';
+
+        echo '<label for="widget_area">';
+        _e('Add page by page content to display over the featured image (or slider)', 'jma_textdomain');
+        echo '</label><br/><br/> ';
+        
+        $content = !isset($header_values['widget_area'])? '': $header_values['widget_area'];
+        wp_editor(htmlspecialchars_decode($content), '_jma_widget_area', array(
+            "media_buttons" => true
+    ));
+
         $x = ob_get_contents();
         $x = apply_filters('jma_current_page_options', $x, $header_values);
         ob_end_clean();
@@ -131,13 +143,12 @@ if (!function_exists('jma_save_header_postdata')) {
 
         /* OK, its safe for us to save the data now. */
 
-        // Sanitize user input.
-        foreach ($_POST as $i => $value) {
+        // Sanitize user input.  htmlspecialchars($_POST['_right_sb_wysiwyg']);
+        $values = $_POST;
+        $values['widget_area'] = htmlspecialchars($_POST[ '_jma_widget_area']);
+        foreach ($values as $i => $value) {
             $clean_data[$i] = sanitize_text_field($value);
         }
-        /*$jma_data['change_header_default'] = sanitize_text_field($_POST['change_header_default']);
-        $jma_data['slider_id'] = sanitize_text_field($_POST['slider_id']);
-        $jma_data['use_featured_image'] = sanitize_text_field($_POST['use_featured_image']);*/
 
         // Update the meta field in the database.
         update_post_meta($post_id, '_jma_header_data_key', $clean_data);
@@ -160,7 +171,9 @@ if (!function_exists('jma_add_banner_input_box')) {
                 'jma_banner_input_section',
                 __('Current Page Banner Content', 'jma_textdomain'),
                 'jma_banner_input_box',
-                $screen, 'normal', 'high'
+                $screen,
+                'normal',
+                'high'
             );
         }
     }

@@ -1,59 +1,44 @@
 jQuery(document).ready(function($) {
     $window = $(window);
 
-    /* replace the parent theme toggle code with this containing angles instead of plus/minus*/
-    $('.collapse').on('show.bs.collapse', function() {
-
-        // Toggle is opening, add "active-trigger" class and
-        // change icon to a minus sign.
-        $(this).closest('.panel').find('.panel-heading a').addClass('active-trigger').find('.switch-me').removeClass('fa-angle-right').addClass('fa-angle-down');
-
-    });
-
-    $('.collapse').on('hide.bs.collapse', function() {
-
-        // Toggle is closing, remove "active-trigger" class and
-        // change icon to a plus sign.
-        $(this).closest('.panel').find('.panel-heading a').removeClass('active-trigger').find('.switch-me').removeClass('fa-angle-down').addClass('fa-angle-right');
-
-    });
-
     function fix_menu() {
-        if ($(window).width() > 991) {
+        //reads @media query in base.css to trigger window size change
+        if (($('.copyright').css('margin-bottom') == '5px')) {
             var $menu = $('#branding').find('#access');
-            var $menu_top_pos = parseInt($('#wrapper').css("padding-top"));
+            var menu_top_pos = parseInt($('#wrapper').css("padding-top"));
             $logo_wrap = $menu.find('.site-logo');
 
             $menu.prevAll().each(function() {
-                $menu_top_pos += $(this).height();
+                menu_top_pos += $(this).height();
             });
-            var $admin_bar_height = $('#wpadminbar').length ? $('#wpadminbar').height() : 0;
-            var $offset = $window.scrollTop();
+            var admin_bar_height = $('#wpadminbar').length ? $('#wpadminbar').height() : 0;
+            var offset = $window.scrollTop();
             var menu_height = $menu.height();
+            var $menu_ul = $menu.find('.sf-menu');
 
-            if ($offset > $menu_top_pos &&
-                (($(window).height() + menu_height + $menu_top_pos + 25) < $('body').height())) {
+            if (offset > menu_top_pos &&
+                (($(window).height() + menu_height + menu_top_pos + 25) < $('body').height())) {
                 $menu.addClass('fix-menu');
                 $menu.css({
-                    'top': $admin_bar_height + 'px',
+                    'top': admin_bar_height + 'px',
                     'height': $menu.find('ul.sf-menu').find('li.level-1').find('a').outerHeight() + 'px'
                 });
-                $widget_height = 0;
-                console.log(menu_height);
+                widget_height = 0;
+
                 $menu.next().css('margin-top', menu_height + 'px');
                 if ($menu.hasClass('bottom')) {
                     if ($menu.find('.jma-header-right').length) {
-                        $widget_height = $menu.find('.jma-header-right').outerHeight(true) + parseInt($menu.find('.jma-header-right').css('top'), 10);
+                        widget_height = $menu.find('.jma-header-right').outerHeight(true) + parseInt($menu.find('.jma-header-right').css('top'), 10);
                     }
                     if (!$menu.hasClass('slide-menu')) {
-                        $menu.find('.sf-menu').css('margin-top', $widget_height + 'px');
+                        $menu_ul.css('margin-top', widget_height + 'px');
                     } else {
-                        $menu.find('.sf-menu').css('margin-top', '');
+                        $menu_ul.css('margin-top', '');
                     }
                 }
-                $logo_vert_padding = $logo_wrap.outerHeight() - $logo_wrap.height();
+                logo_vert_padding = $logo_wrap.outerHeight() - $logo_wrap.height();
                 $logo_wrap.find('img').css({
-                    'height': ($widget_height + menu_height - $logo_vert_padding) + 'px'
+                    'height': (widget_height + $menu_ul.outerHeight() - logo_vert_padding) + 'px'
                 });
             } else {
                 $menu.removeClass('fix-menu');
@@ -62,7 +47,7 @@ jQuery(document).ready(function($) {
                     'height': ''
                 });
                 $menu.next().css('margin-top', '');
-                $menu.find('.sf-menu').css('margin-top', '');
+                $menu_ul.css('margin-top', '');
                 $logo_wrap.find('img').css({
                     'height': $logo_wrap.find('img').attr('height') + 'px'
                 });

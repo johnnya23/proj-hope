@@ -1,3 +1,37 @@
+.big_slider_wide .nivo-caption h2 {
+    font-size: 40px;
+}
+
+.big_slider .nivo-caption h2 {
+    color: #ffffff;
+}
+
+.big_slider .nivo-caption h2.blue-text {
+    color: #000044;
+    text-shadow: rgb(255, 255, 255) 1px 0px 0px, rgb(255, 255, 255) 0.540302px 0.841471px 0px, rgb(255, 255, 255) -0.416147px 0.909297px 0px, rgb(255, 255, 255) -0.989992px 0.14112px 0px, rgb(255, 255, 255) -0.653644px -0.756802px 0px, rgb(255, 255, 255) 0.283662px -0.958924px 0px, rgb(255, 255, 255) 0.96017px -0.279415px 0px;
+}
+
+body .metaslider .theme-default .nivo-caption a.btn {
+    border-width: 0 !important;
+    background: #ffffff;
+    color: #000066;
+    font-size: 14px;
+}
+
+body .metaslider .theme-default .nivo-caption a.btn:hover {
+    background: #cccccc;
+    color: #000099;
+}
+
+.metaslider .nivo-caption .jma-wrapper .ml-caption-content {
+    color: #000033;
+    font-size: 20px;
+}
+
+#access.fix-menu.remove_root_bg {
+    background-color: #ffffff !important;
+}
+
 @media(max-width: 767px) {
     .header-logo img {
         max-height: 52px;

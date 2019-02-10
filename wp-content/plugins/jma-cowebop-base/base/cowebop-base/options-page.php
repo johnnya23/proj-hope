@@ -93,14 +93,14 @@ $options = array(
     'std'       => '30px',
     'type' 		=> 'select',
     'options'   => array(
-        '80px' => '80px',
-        '70px' => '70px',
-        '60px' => '60px',
-        '50px' => '50px',
-        '40px' => '40px',
-        '30px' => '30px',
-        '20px' => '20px',
-        '10px' => '10px',
+        '80' => '80px',
+        '70' => '70px',
+        '60' => '60px',
+        '50' => '50px',
+        '40' => '40px',
+        '30' => '30px',
+        '20' => '20px',
+        '10' => '10px',
         )
     ),
     array(
@@ -110,12 +110,12 @@ $options = array(
     'std'       => '30px',
     'type' 		=> 'select',
     'options'   => array(
-        '60px' => '60px',
-        '50px' => '50px',
-        '40px' => '40px',
-        '30px' => '30px',
-        '20px' => '20px',
-        '10px' => '10px',
+        '60' => '60px',
+        '50' => '50px',
+        '40' => '40px',
+        '30' => '30px',
+        '20' => '20px',
+        '10' => '10px',
         )
     ),
     array(
@@ -298,14 +298,14 @@ $options = array(
     'name'      => __('Banner Background Color', 'themeblvd'),
     'desc'      => __('The color for the banner background', 'themeblvd'),
     'id'        => 'banner_bg_color',
-    'std'       => '',
+    'std'       => '#333333',
     'type'      => 'color' ,
     ),
     array(
     'name'      => __('Banner Font Color', 'themeblvd'),
     'desc'      => __('The color for the banner font', 'themeblvd'),
     'id'        => 'banner_font_color',
-    'std'       => '',
+    'std'       => '#ffffff',
     'type'      => 'color',
     ),
 );
@@ -348,6 +348,7 @@ themeblvd_edit_option('layout', 'footer', 'footer_copyright', 'std', $new_footer
 
 themeblvd_edit_option('content', 'list', 'list_more_text', 'std', 'Read More <i class="fas fa-long-arrow-alt-right"></i>');
 themeblvd_edit_option('content', 'list', 'list_more_text', 'desc', 'Fontawesome 5 sub = Read More &lt;i class="fas fa-long-arrow-alt-right"&gt;&lt;/i&gt;');
+themeblvd_edit_option('layout', 'footer', 'footer_copyright', 'type', 'textarea');
 
 $schema_options = array(
     'schema_Company' => 'CoWEBop Marketing',
@@ -358,7 +359,8 @@ $schema_options = array(
     'schema_Zip' => '80023',
     'schema_Country' => 'US',
     'schema_Email' => 'tracy@cowebop.com',
-    'schema_Phone' => '303.459.2686'
+    'schema_Phone' => '303.459.2686',
+    'schema_FooterExtra' => 'optional rightside content (not part of schema)'
 );
 foreach ($schema_options as $schema_option => $default) {
     $pobox_desc = $schema_option === 'schema_StreetOrPOBox'? ' start with exactly "P.O. Box" (no quotes) if this is a P.O. Box.': '';
